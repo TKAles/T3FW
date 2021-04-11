@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding ="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" >
+  <PropertyGroup Label="Globals" >
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{a2fb2e2a-62c3-4ee6-b9b8-378fac5f302b}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\source\SW_SPI.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\TMC2130Stepper.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\TMC2130Stepper_CHOPCONF.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\TMC2130Stepper_COOLCONF.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\TMC2130Stepper_DRV_STATUS.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\TMC2130Stepper_GCONF.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\TMC2130Stepper_IHOLD_IRUN.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\TMC2130Stepper_PWMCONF.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\TMC2130Stepper.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\TMC2130Stepper_REGDEFS.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\TMC2130Stepper_UTILITY.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\source\SW_SPI.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\source\TMC2130Stepper_MACROS.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="$(MSBuildThisFileDirectory)keywords.txt" />
+<Text Include="$(MSBuildThisFileDirectory)library.properties" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)LICENSE" />
+<None Include="$(MSBuildThisFileDirectory)README.md" />
+  </ItemGroup>
+</Project>

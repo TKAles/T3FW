@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding ="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" >
+  <PropertyGroup Label="Globals" >
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{45b1aba1-ae28-488a-bc2a-21c5c8bfca29}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)src\source\CHOPCONF.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\COOLCONF.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\DRVCONF.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\DRVCTRL.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\DRVSTATUS.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\DRV_CONF.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\DRV_STATUS.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\ENCMODE.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\GCONF.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\IHOLD_IRUN.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\PWMCONF.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\RAMP_STAT.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\SERIAL_SWITCH.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\SGCSCONF.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\SHORT_CONF.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\SMARTEN.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\SW_MODE.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\SW_SPI.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\TMC2130Stepper.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\TMC2160Stepper.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\TMC2208Stepper.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\TMC2209Stepper.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\TMC2660Stepper.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\TMC5130Stepper.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\TMC5160Stepper.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)src\source\TMCStepper.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)src\TMCStepper.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\TMCStepper_UTILITY.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\source\SERIAL_SWITCH.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\source\SW_SPI.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\source\TMC2130_bitfields.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\source\TMC2160_bitfields.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\source\TMC2208_bitfields.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\source\TMC2209_bitfields.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\source\TMC2660_bitfields.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\source\TMC5130_bitfields.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\source\TMC5160_bitfields.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\source\TMC_MACROS.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)src\source\TMC_platforms.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="$(MSBuildThisFileDirectory)keywords.txt" />
+<Text Include="$(MSBuildThisFileDirectory)library.properties" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Doxyfile" />
+<None Include="$(MSBuildThisFileDirectory)library.json" />
+<None Include="$(MSBuildThisFileDirectory)LICENSE" />
+<None Include="$(MSBuildThisFileDirectory)README.md" />
+  </ItemGroup>
+</Project>
