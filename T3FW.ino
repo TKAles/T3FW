@@ -63,6 +63,8 @@ void setup() {
 	{
 		pinMode(M0_PIN[i], OUTPUT); pinMode(M1_PIN[i], OUTPUT);
 		pinMode(M2_PIN[i], OUTPUT); pinMode(M3_PIN[i], OUTPUT);
+		digitalWriteFast(M0_PIN[i], LOW); digitalWriteFast(M1_PIN[i], LOW);
+		digitalWriteFast(M2_PIN[i], LOW); digitalWriteFast(M3_PIN[i], LOW);
 	}
 	initalize_motors();
 	Serial.println("Ready.");
@@ -128,7 +130,7 @@ void loop() {
 			value: 0-4. Axes 0-3. 4 - Assign to all T3 motors (1-3).
 			extra: 1/microstep
 		*/
-		if (key == "microstep")
+		else if (key == "microstep")
 		{
 			_response["keyword"].set("microstep");
 			int channel = INPUT_JSON["value"].as<int>();
@@ -180,7 +182,7 @@ void loop() {
 			value: 0-4. Axes 0-3. 4 - Assign to all axes
 			extra: step current in milliamps
 		*/
-		if (key == "current")
+		else if (key == "current")
 		{
 			// Pick off the axis and current requested
 			int axis = INPUT_JSON["value"].as<uint8_t>();
@@ -236,7 +238,7 @@ void loop() {
 			extra: steps to move. Sign determines direction.
 				   CW is positive. CCW is negative.
 		*/
-		if (key == "move")
+		else if (key == "move")
 		{
 			// Pull out the axes requested and the steps required for movement.
 			int move_axis = INPUT_JSON["value"].as<int>();
@@ -279,7 +281,7 @@ void loop() {
 
 			// Lockstep T3 Motor Case
 			case 4:
-				int delay_micro = 50;
+				int delay_micro = 10000;
 				int _s;
 				if (steps_req < 0)
 				{
@@ -296,19 +298,63 @@ void loop() {
 				}
 				for (int i = 0; i < _s; i++)
 				{
-					digitalWriteFast(M1_PIN[1], LOW);
-					digitalWriteFast(M2_PIN[1], LOW);
-					digitalWriteFast(M3_PIN[1], LOW);
+					digitalWriteFast(M1_PIN[2], LOW);
+					digitalWriteFast(M2_PIN[2], LOW);
+					digitalWriteFast(M3_PIN[2], LOW);
 					delayMicroseconds(delay_micro);
-					digitalWriteFast(M1_PIN[1], HIGH);
-					digitalWriteFast(M2_PIN[1], HIGH);
-					digitalWriteFast(M3_PIN[1], HIGH);
+					digitalWriteFast(M1_PIN[2], HIGH);
+					digitalWriteFast(M2_PIN[2], HIGH);
+					digitalWriteFast(M3_PIN[2], HIGH);
 					delayMicroseconds(delay_micro);
 				}
+				_response["value"] = 4;
+				_response["extra"] = steps_req;
+				serializeJson(_response, Serial);
+				Serial.print('\n');
 				COUNTS[1] += steps_req;
 				COUNTS[2] += steps_req;
 				COUNTS[3] += steps_req;
 			}
+		}
+		/*
+			zero command.
+			zeros out the COUNTS global array
+			value: 0-4. Axis to zero. 4 is a shortcut for all axes.
+			extra: 0
+		*/
+		else if (key == "zero")
+		{
+			if (INPUT_JSON["value"].as<int>() == 4)
+			{
+				for (int i = 0; i < 4; i++)
+				{
+					COUNTS[i] = 0;
+				}
+			}
+			else {
+				COUNTS[INPUT_JSON["value"].as<int>()] = 0;
+			}
+			_response["keyword"] = "zero";
+			_response["value"] = INPUT_JSON["value"].as<int>();
+			_response["extra"] = 0;
+			serializeJson(_response, Serial);
+			Serial.print('\n');
+			return;
+			}
+		else if (key == "counts")
+		{
+		_response["keyword"] = "counts";
+		_response["value"] = 0;
+		for (int i = 0; i < 4; i++)
+		{
+			_response["extra"].add(COUNTS[i]);
+		}
+		serializeJson(_response, Serial);
+		Serial.print('\n');
+		}
+		else
+		{
+		Serial.println("BADCMD");
 		}
 	}
 
@@ -325,20 +371,20 @@ void initalize_motors()
 	M2.begin();
 	M3.begin();
 	// Disable stealthChop
-	M0.stealthChop(false);
-	M1.stealthChop(false);
-	M2.stealthChop(false);
-	M3.stealthChop(false);
+	M0.stealthChop(true);
+	M1.stealthChop(true);
+	M2.stealthChop(true);
+	M3.stealthChop(true);
 	// Set current to 600mA as default, and disable microstepping.
-	M0.setCurrent(600, 0.11F, 1.0);
-	M1.setCurrent(600, 0.11F, 1.0);
-	M2.setCurrent(600, 0.11F, 1.0);
-	M3.setCurrent(600, 0.11F, 1.0);
+	M0.setCurrent(100, 0.11F, 1.0);
+	M1.setCurrent(100, 0.11F, 1.0);
+	M2.setCurrent(100, 0.11F, 1.0);
+	M3.setCurrent(100, 0.11F, 1.0);
 	M0.mres(8);
 	M1.mres(8);
 	M2.mres(8);
 	M3.mres(8);
-
+	
 	return;
 }
 
@@ -346,10 +392,10 @@ void initalize_motors()
 	move_motor(int step_pin, int dir_pin, int steps)
 	Moves a motor a given number of steps.
 */
-void move_motor(int step_pin, int dir_pin, int steps)
+void move_motor(int dir_pin, int step_pin, int steps)
 {
 	bool fwd_dir = true;
-	int delay_in_microseconds = 50;	// Delay between step toggle in microseconds
+	int delay_in_microseconds = 10000;	// Delay between step toggle in microseconds
 	digitalWrite(dir_pin, HIGH);
 	// If less than zero, flip the steps positive and toggle forward flag to false
 	if (steps < 0)
@@ -361,9 +407,9 @@ void move_motor(int step_pin, int dir_pin, int steps)
 	// TODO: Limit switch awareness.
 	for (int i = 0; i < steps; i++)
 	{
-		digitalWriteFast(step_pin, LOW);
+		digitalWrite(step_pin, LOW);
 		delayMicroseconds(delay_in_microseconds);
-		digitalWriteFast(step_pin, HIGH);
+		digitalWrite(step_pin, HIGH);
 		delayMicroseconds(delay_in_microseconds);
 	}
 	return;
