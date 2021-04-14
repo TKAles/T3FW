@@ -11,12 +11,15 @@
 
 // Motor Pin Location Arrays
 // Format: {CS, DIR, STEP, LIMIT SWITCH}
-
+#define ENCODER_OPTIMIZE_INTERRUPTS
+#include <Encoder.h>
 #include <ArduinoJson.hpp>
 #include <ArduinoJson.h>
 #include <TMC2130Stepper_UTILITY.h>
 #include <TMC2130Stepper_REGDEFS.h>
 #include <TMC2130Stepper.h>
+
+#define EncoderSerial Serial1
 
 DynamicJsonDocument INPUT_JSON(2048);
 const int FW_VER[] = { 0, 1, 0 };
@@ -43,15 +46,26 @@ TMC2130Stepper M0 = TMC2130Stepper(M0_PIN[0]);
 TMC2130Stepper M1 = TMC2130Stepper(M1_PIN[0]);
 TMC2130Stepper M2 = TMC2130Stepper(M2_PIN[0]);
 TMC2130Stepper M3 = TMC2130Stepper(M3_PIN[0]);
+
 // Stepper count array
 int32_t COUNTS[] = { 0, 0, 0, 0 };
+
+// Encoder object for the GR Motor Encoder
+Encoder GMENC(22, 23);
 
 void setup() {
 	// Initalize serial link. Print header + FW version
 	Serial.begin(115200);
+	delay(25);
 	Serial.println("T3 Controller. FW: " + String(FW_VER[0]) 
 					+ "." + String(FW_VER[1]) + "." 
 					+ String(FW_VER[2]));
+	// Enable the output of the TXB0106PWR to level shift
+	// the encoder pulses.
+	pinMode(20, OUTPUT);
+	digitalWrite(20, HIGH);
+	// Startup the UART for the Encoder
+	EncoderSerial.begin(115200);
 	// Pin States
 	pinMode(MOSI_PIN, OUTPUT); pinMode(MISO_PIN, INPUT);
 	pinMode(SCK_PIN, OUTPUT);
@@ -376,10 +390,10 @@ void initalize_motors()
 	M2.stealthChop(true);
 	M3.stealthChop(true);
 	// Set current to 600mA as default, and disable microstepping.
-	M0.setCurrent(100, 0.11F, 1.0);
-	M1.setCurrent(100, 0.11F, 1.0);
-	M2.setCurrent(100, 0.11F, 1.0);
-	M3.setCurrent(100, 0.11F, 1.0);
+	M0.setCurrent(200, 0.11F, 1.0);
+	M1.setCurrent(350, 0.11F, 1.0);
+	M2.setCurrent(350, 0.11F, 1.0);
+	M3.setCurrent(350, 0.11F, 1.0);
 	M0.mres(8);
 	M1.mres(8);
 	M2.mres(8);
@@ -395,7 +409,7 @@ void initalize_motors()
 void move_motor(int dir_pin, int step_pin, int steps)
 {
 	bool fwd_dir = true;
-	int delay_in_microseconds = 10000;	// Delay between step toggle in microseconds
+	int delay_in_microseconds = 2500;	// Delay between step toggle in microseconds
 	digitalWrite(dir_pin, HIGH);
 	// If less than zero, flip the steps positive and toggle forward flag to false
 	if (steps < 0)
